@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<sdf version="1.4">
+  <model name="test_model">
+    <pose>0 0 0.0 0 0 0</pose>
+    <static>true</static>
+    <link name="link">
+      <inertial>
+        <mass>{m}</mass>
+        <inertia>
+          <ixx>{xx}</ixx>
+          <ixy>{xy}</ixy>
+          <ixz>{xz}</ixz>
+          <iyy>{yy}</iyy>
+          <iyz>{yz}</iyz>
+          <izz>{zz}</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+					<mesh>
+						<uri>model://{n}/meshes/{mesh}.dae</uri>
+					</mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+					<mesh>
+						<uri>model://{n}/meshes/{mesh}.dae</uri>
+						<scale>{s} {s} {s}</scale>
+					</mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

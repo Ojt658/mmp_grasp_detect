@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<model>
+  <version>1.0</version>
+  <name>{n}</name>
+  <sdf version="1.6">model.sdf</sdf>
+
+  <author>
+    <name>Ollie Thomas</name>
+    <email>olt13@aber.ac.uk</email>
+  </author>
+
+  <description>
+    A model of {n}
+  </description>
+</model>
