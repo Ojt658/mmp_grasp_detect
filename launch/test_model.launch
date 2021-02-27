@@ -1,8 +1,0 @@
-<launch>
-	<!-- Start Gazebo with our world model-->
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" value="$(find mmp_grasp_detect)/worlds/scenario.world"/>
-	</include>
-
-	<include file="$(find franka_gripper)/launch/franka_gripper.launch"/>
-</launch>
