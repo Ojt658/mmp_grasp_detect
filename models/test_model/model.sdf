@@ -19,14 +19,16 @@
       <collision name="collision">
         <geometry>
 					<mesh>
-						<uri>model://test_model/meshes/link7.dae</uri>
+						<uri>model://test_model/meshes/1a4ec387ea6820345778775dfd5ca46a.obj</uri>
+						<scale>0.0044 0.0044 0.0044</scale>
 					</mesh>
         </geometry>
       </collision>
       <visual name="visual">
         <geometry>
 					<mesh>
-						<uri>model://test_model/meshes/link7.dae</uri>
+						<uri>model://test_model/meshes/1a4ec387ea6820345778775dfd5ca46a.obj</uri>
+						<scale>0.0044 0.0044 0.0044</scale>
 					</mesh>
         </geometry>
       </visual>

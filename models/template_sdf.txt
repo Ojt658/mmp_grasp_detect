@@ -19,6 +19,7 @@
         <geometry>
 					<mesh>
 						<uri>model://{n}/meshes/{mesh}.dae</uri>
+						<scale>{s} {s} {s}</scale>
 					</mesh>
         </geometry>
       </collision>

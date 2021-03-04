@@ -29,12 +29,12 @@ void collisionObjects(moveit::planning_interface::PlanningSceneInterface& planni
 
     /* Define the pose of the table. */
     collision_objects[0].primitive_poses.resize(1);
-    collision_objects[0].primitive_poses[0].position.x = 0.425;
-    collision_objects[0].primitive_poses[0].position.y = -0.419;
-    collision_objects[0].primitive_poses[0].position.z = 0.7;
+    collision_objects[0].primitive_poses[0].position.x = 0.115;
+    collision_objects[0].primitive_poses[0].position.y = -0.341;
+    collision_objects[0].primitive_poses[0].position.z = 0.632;
 
     tf2::Quaternion q;
-    q.setRPY(0, 0.574, 0.446);
+    q.setRPY(0, 0.395, 0.443);
     collision_objects[0].primitive_poses[0].orientation.w = q.w();
     collision_objects[0].primitive_poses[0].orientation.x = q.x();
     collision_objects[0].primitive_poses[0].orientation.y = q.y();
@@ -57,4 +57,5 @@ int main(int argc, char **argv) {
     moveit::planning_interface::MoveGroupInterface move_group("panda_arm");
     default_pose(move_group);
     ros::spin();
+    return 0;
 }

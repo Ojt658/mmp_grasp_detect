@@ -2,7 +2,7 @@
 <launch>
 	<!-- Tell Gazebo where to find our custom object models -->
 	<env name="GAZEBO_MODEL_PATH"
-		value="$(find mmp_grasp_detect)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+		value="$(find mmp_grasp_detect)/models:$(optenv GAZEBO_MODEL_PATH)"/> 
 
 	<env name="GAZEBO_MODEL_PATH"
 		value="$(find mmp_grasp_detect)/models/acronym:$(optenv GAZEBO_MODEL_PATH)"/>
@@ -12,7 +12,7 @@
 
     <!--launch GAZEBO with own world configuration -->
     <include file="$(find franka_moveit_config)/launch/gazebo.launch">
-		<arg name="world_name" value="$(find mmp_grasp_detect)/worlds/mmp.world" />
+		<arg name="world_name" value="$(find mmp_grasp_detect)/worlds/mmp_with_object.world" />
         <arg name="paused" value="$(arg paused)" />
     </include>
 
@@ -26,8 +26,11 @@
 	<node name="scene_pub" pkg="mmp_grasp_detect" type="scene_pub" output="screen" />
 <!--	<node name="test_quarternion" pkg="mmp_grasp_detect" type="test_quarternion" output="screen" />-->
 
-	<node pkg="tf" type="static_transform_publisher" name="camera_robot_broadcaster" 
-		args="0.425 -0.419 0.7 0 0.574 0.446 panda_link0 kinect 100" />
+	<node pkg="tf" type="static_transform_publisher" name="robot_camera_broadcaster" 
+		args="0.115 -0.341 0.632 0.443 0.395 -0.001 panda_link0 kinect 100" />
+
+	<node pkg="tf" type="static_transform_publisher" name="camera_object_broadcaster" 
+		args="0.89 0.045 -0.28 -0.48 -0.388 0.2000001 kinect object 100" />
 
 	<!-- Launch RViz -->
 	<node type="rviz" name="rviz" pkg="rviz"

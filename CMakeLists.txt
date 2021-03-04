@@ -8,6 +8,9 @@ project(mmp_grasp_detect)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
+  control_msgs
   roscpp
   rospy
   moveit_core
@@ -15,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_ros_planning
   moveit_ros_planning_interface
   tf2
+  tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -109,7 +113,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES mmp_grasp_detect
-  CATKIN_DEPENDS roscpp rospy moveit_core moveit_msgs moveit_ros_planning moveit_ros_planning_interface tf2
+  CATKIN_DEPENDS roscpp rospy moveit_core moveit_msgs moveit_ros_planning moveit_ros_planning_interface tf2 tf2_ros actionlib actionlib_msgs control_msgs
 )
 
 ###########
@@ -137,6 +141,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(scene_pub src/scene_pub.cpp)
+add_executable(grasp src/grasp.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +155,7 @@ add_executable(scene_pub src/scene_pub.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(scene_pub ${catkin_LIBRARIES})
+target_link_libraries(grasp ${catkin_LIBRARIES})
 
 #############
 ## Install ##

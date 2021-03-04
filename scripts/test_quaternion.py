@@ -10,7 +10,7 @@ import geometry_msgs.msg
 
 
 class GraspTransformBroadcaster(object):
-    _br = tf2_ros.TransformBroadcaster()
+    _br = tf2_ros.StaticTransformBroadcaster()
     _msg = geometry_msgs.msg.TransformStamped()
 
     def __init__(self):
@@ -21,7 +21,7 @@ class GraspTransformBroadcaster(object):
 
         grasp_file = h5py.File(grasp_location + files[0][0])
         grasp_tf = grasp_file['grasps/transforms'][()]
-        # print(grasp_tf[0])
+        # print(grasp_file['object/file'][()])
 
         arr = np.array(grasp_tf[0])
 
@@ -31,8 +31,8 @@ class GraspTransformBroadcaster(object):
         q = transformations.quaternion_from_euler(rpy_angles[0], rpy_angles[1], rpy_angles[2])
 
         self._msg.header.stamp = rospy.Time.now()
-        self._msg.header.frame_id = "panda_link0"
-        self._msg.child_frame_id = "target"
+        self._msg.header.frame_id = "object"
+        self._msg.child_frame_id = "grasp"
         self._msg.transform.translation.x = translation_vector[0]
         self._msg.transform.translation.y = translation_vector[1]
         self._msg.transform.translation.z = translation_vector[2]
@@ -41,6 +41,7 @@ class GraspTransformBroadcaster(object):
         self._msg.transform.rotation.y = q[1]
         self._msg.transform.rotation.z = q[2]
         self._msg.transform.rotation.w = q[3]
+        print(self._msg)
 
 
     def broadcast(self):
@@ -49,8 +50,5 @@ class GraspTransformBroadcaster(object):
 
 rospy.init_node('test_q')
 tb = GraspTransformBroadcaster()
-rate = rospy.Rate(10)
-while not rospy.is_shutdown():
-    tb.broadcast()
-    rospy.loginfo("BROADCASTING")
-    # rate.sleep()
+tb.broadcast()
+rospy.spin()
