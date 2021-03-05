@@ -19,14 +19,14 @@ class GraspIt {
 };
 
 void GraspIt::gripper() {
-    float gripper_pose = 10;
-    gripper_control_client gripper_client("/panda_hand_controller/gripper_action", true);
-    gripper_client.waitForServer(); //will wait for infinite time
-    control_msgs::FollowJointTrajectoryActionGoal gripper_goal;
-    gripper_goal.command.max_effort = 11.0;
-    gripper_goal.command.position = gripper_pose;
-    gripper_client.sendGoal(gripper_goal);
-    gripper_client.waitForResult(ros::Duration(5.0));
+    // float gripper_pose = 10;
+    // gripper_control_client gripper_client("/panda_hand_controller/gripper_action", true);
+    // gripper_client.waitForServer(); //will wait for infinite time
+    // control_msgs::FollowJointTrajectoryActionGoal gripper_goal;
+    // gripper_goal.command.max_effort = 11.0;
+    // gripper_goal.command.position = gripper_pose;
+    // gripper_client.sendGoal(gripper_goal);
+    // gripper_client.waitForResult(ros::Duration(5.0));
 }
 
 bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_group) {  // Position above the object/bucket using the transform frame
