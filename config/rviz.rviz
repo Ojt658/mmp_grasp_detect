@@ -5,10 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Image1
-        - /TF1
         - /TF1/Frames1
-      Splitter Ratio: 0.7425600290298462
-    Tree Height: 138
+      Splitter Ratio: 0.6300129294395447
+    Tree Height: 290
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -159,7 +158,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: panda_arm
+        Planning Group: hand
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -341,11 +340,11 @@ Visualization Manager:
     - Class: rviz/Image
       Enabled: true
       Image Topic: /camera/depth/image_raw
-      Max Value: 2
+      Max Value: 3
       Median window: 5
-      Min Value: 0
+      Min Value: 0.5
       Name: Image
-      Normalize Range: true
+      Normalize Range: false
       Queue Size: 2
       Transport Hint: raw
       Unreliable: false
@@ -355,9 +354,7 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        grasp:
-          Value: true
-        kinect:
+        camera_link:
           Value: true
         object:
           Value: true
@@ -394,11 +391,11 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
+          object:
+            {}
           panda_link0:
-            kinect:
-              object:
-                grasp:
-                  {}
+            camera_link:
+              {}
             panda_link1:
               panda_link2:
                 panda_link3:
@@ -430,25 +427,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 5.042591094970703
+      Distance: 2.060783863067627
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.020693957805633545
-        Y: 1.0582318305969238
-        Z: -1.147388843492081e-6
+        X: 1.1475956439971924
+        Y: 0.9371044635772705
+        Z: -8.195634109142702e-7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.29979828000068665
+      Pitch: 0.854797899723053
       Target Frame: world
       Value: XYOrbit (rviz)
-      Yaw: 1.391198754310608
+      Yaw: 0.021214481443166733
     Saved: ~
 Window Geometry:
   Displays:
@@ -464,7 +461,7 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000010000000000000307000003c2fc0200000009fb000000100044006900730070006c006100790073010000003d0000011b000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000000a0049006d006100670065010000015e000001120000001600fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000276000001890000017d00fffffffb0000000c00430061006d006500720061000000034d000000b20000000000000000000006f3000003c200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000010000000000000307000003c2fc0200000009fb000000100044006900730070006c006100790073010000003d000001b3000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000000a0049006d00610067006501000001f60000007a0000001600fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000276000001890000017d00fffffffb0000000c00430061006d006500720061000000034d000000b20000000000000000000006f3000003c200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 2560

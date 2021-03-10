@@ -20,13 +20,20 @@ class GraspTransformBroadcaster(object):
         files = [f for r, d, f in os.walk(os.getcwd())]
 
         grasp_file = h5py.File(grasp_location + files[0][0])
-        grasp_tf = grasp_file['grasps/transforms'][()]
+        grasp_tf_arr = grasp_file['grasps/transforms'][()]
+        grasp_succ_arr = grasp_file['grasps/qualities/flex/object_in_gripper'][()]
+        succ = []
         # print(grasp_file['object/file'][()])
 
-        arr = np.array(grasp_tf[0])
+        for index in range(len(grasp_tf_arr)):
+            if grasp_succ_arr[index] == 1:
+                print(index)
+                succ.append(grasp_tf_arr[index])
+
+        grasp_tf = np.array(succ[1])
 
         # Decode 4x4 transformation matrix
-        scale, shear, rpy_angles, translation_vector, perspective = transformations.decompose_matrix(arr)
+        scale, shear, rpy_angles, translation_vector, perspective = transformations.decompose_matrix(grasp_tf)
         # print(translation_vector)
         q = transformations.quaternion_from_euler(rpy_angles[0], rpy_angles[1], rpy_angles[2])
 

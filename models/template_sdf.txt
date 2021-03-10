@@ -18,7 +18,7 @@
       <collision name="collision">
         <geometry>
 					<mesh>
-						<uri>model://{n}/meshes/{mesh}.dae</uri>
+						<uri>model://{n}/meshes/{mesh}</uri>
 						<scale>{s} {s} {s}</scale>
 					</mesh>
         </geometry>
@@ -26,10 +26,16 @@
       <visual name="visual">
         <geometry>
 					<mesh>
-						<uri>model://{n}/meshes/{mesh}.dae</uri>
+						<uri>model://{n}/meshes/{mesh}</uri>
 						<scale>{s} {s} {s}</scale>
 					</mesh>
         </geometry>
+        <material>
+          <ambient>0.25 0.25 0.25 1</ambient>
+          <diffuse>0.25 0.25 0.25 1</diffuse>
+          <specular>0.25 0.25 0.25 1</specular>
+          <emissive>0.25 0.25 0.25 1</emissive>
+        </material> 
       </visual>
     </link>
   </model>

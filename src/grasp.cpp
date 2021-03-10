@@ -8,7 +8,7 @@
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
-#include <control_msgs/FollowJointTrajectoryActionGoal.h>
+#include <trajectory_msgs/JointTrajectory.h>
 
 typedef actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> gripper_control_client;
 
@@ -23,6 +23,9 @@ void GraspIt::gripper() {
     // gripper_control_client gripper_client("/panda_hand_controller/gripper_action", true);
     // gripper_client.waitForServer(); //will wait for infinite time
     // control_msgs::FollowJointTrajectoryActionGoal gripper_goal;
+    // trajectory_msgs::JointTrajectory gripper_msg;
+    // gripper_msg.points
+    // gripper_goal.goal.trajectory = 
     // gripper_goal.command.max_effort = 11.0;
     // gripper_goal.command.position = gripper_pose;
     // gripper_client.sendGoal(gripper_goal);

@@ -64,8 +64,10 @@
   <depend>actionlib</depend>
   <depend>actionlib_msgs</depend>
   <depend>control_msgs</depend>
-
-
+  <depend>cv_bridge</depend>
+  <depend>geometry_msgs</depend>
+  <depend>image_transport</depend>
+  <depend>opencv_apps</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

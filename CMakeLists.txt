@@ -19,7 +19,13 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_ros_planning_interface
   tf2
   tf2_ros
+  cv_bridge
+  geometry_msgs
+  image_transport
+  opencv_apps
 )
+
+find_package(OpenCV REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -113,7 +119,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES mmp_grasp_detect
-  CATKIN_DEPENDS roscpp rospy moveit_core moveit_msgs moveit_ros_planning moveit_ros_planning_interface tf2 tf2_ros actionlib actionlib_msgs control_msgs
+  CATKIN_DEPENDS roscpp rospy moveit_core moveit_msgs moveit_ros_planning moveit_ros_planning_interface tf2 tf2_ros actionlib actionlib_msgs control_msgs cv_bridge geometry_msgs image_transport opencv_apps
 )
 
 ###########
@@ -142,6 +148,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(scene_pub src/scene_pub.cpp)
 add_executable(grasp src/grasp.cpp)
+add_executable(depth src/depthDetection.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -156,6 +163,7 @@ add_executable(grasp src/grasp.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(scene_pub ${catkin_LIBRARIES})
 target_link_libraries(grasp ${catkin_LIBRARIES})
+target_link_libraries(depth ${catkin_LIBRARIES})
 
 #############
 ## Install ##

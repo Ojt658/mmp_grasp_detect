@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="input_image" value="/camera/color/image_raw"/>
+
+	<!--load rgb colour filtering
+		publishes image to /rgb_color_filter/image [update for node name]
+		equivalents available for hls and hsv
+	-->
+
+	<include file="$(find opencv_apps)/launch/rgb_color_filter.launch">
+		<arg name="node_name" value="rgb_color_filter" />
+		<arg name="image" value="$(arg input_image)"/>
+		<arg name="r_limit_max" value="140" />
+		<arg name="r_limit_min" value="80" />
+		<arg name="g_limit_max" value="140" />
+		<arg name="g_limit_min" value="80" />
+		<arg name="b_limit_max" value="140" />
+		<arg name="b_limit_min" value="80" />
+		<arg name="debug_view" value="true"/>
+	</include>
+	
+	<!--calculate image moments for contours in input image.
+		Works okay taking input from colour filter or edge detection
+		publishes image to /contour_moments/image
+		moments to /contour_moments/moments
+	-->
+	<include file="$(find opencv_apps)/launch/contour_moments.launch">
+		<arg name="node_name" value="moment" />
+		<arg name="image" value="/rgb_color_filter/image"/>
+		<arg name="debug_view" value="true"/>
+	</include>
+</launch>
