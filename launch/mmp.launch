@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Tell Gazebo where to find our custom object models -->
+    <env name="GAZEBO_MODEL_PATH"
+         value="$(find mmp_grasp_detect)/models/acronym2:$(optenv GAZEBO_MODEL_PATH)"/> 
+
+    <!-- GAZEBO arguments -->
+    <arg name="paused" default="false" />
+
+    <!--launch GAZEBO with own world configuration -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find mmp_grasp_detect)/worlds/fetch_world.world" />
+    </include>
+
+
+	<!-- Launch moveit move group -->
+	<include file="$(find fetch_moveit_config)/launch/move_group.launch"/>
+
+	<!--<node pkg="tf" type="static_transform_publisher" name="world_object_broadcaster" 
+		args="0.711 0.001 0.016 0 0 0 world object 100" />-->
+
+	<!-- Start the fetch robot -->
+	<include file="$(find fetch_gazebo)/launch/include/fetch.launch.xml"/>
+
+
+	<!-- Launch RViz -->
+	<node type="rviz" name="rviz" pkg="rviz"
+		args="-d $(find mmp_grasp_detect)/config/rviz.rviz"/>
+
+	<!-- Launch colour filter and node to get object pose -->
+	<include file="$(find mmp_grasp_detect)/launch/image_proc.launch" />
+	<node name="grasp_service" pkg="mmp_grasp_detect" type="get_grasp_service.py" output="screen"/>
+
+	<node name="scene_pub" pkg="mmp_grasp_detect" type="scene_pub" output="screen" />
+
+</launch>
