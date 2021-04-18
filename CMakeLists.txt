@@ -68,11 +68,10 @@ find_package(OpenCV REQUIRED)
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  GetGrasp.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -82,10 +81,11 @@ find_package(OpenCV REQUIRED)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+  sensor_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -149,6 +149,7 @@ include_directories(
 add_executable(scene_pub src/scene_pub.cpp)
 add_executable(grasp src/grasp.cpp)
 add_executable(depth src/depthDetection.cpp)
+add_executable(img2model src/image_to_model.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -164,6 +165,7 @@ add_executable(depth src/depthDetection.cpp)
 target_link_libraries(scene_pub ${catkin_LIBRARIES})
 target_link_libraries(grasp ${catkin_LIBRARIES})
 target_link_libraries(depth ${catkin_LIBRARIES})
+target_link_libraries(img2model ${catkin_LIBRARIES})
 
 #############
 ## Install ##

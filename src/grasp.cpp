@@ -1,35 +1,30 @@
 #include <ros/ros.h>
-#include <trajectory_msgs/JointTrajectoryPoint.h>
-#include <trajectory_msgs/JointTrajectory.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
-
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
-#include <control_msgs/FollowJointTrajectoryAction.h>
-#include <trajectory_msgs/JointTrajectory.h>
+#include <control_msgs/GripperCommandGoal.h>
+#include <control_msgs/GripperCommandAction.h>
 
-typedef actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> gripper_control_client;
+typedef actionlib::SimpleActionClient<control_msgs::GripperCommandAction> gripper_control_client;
 
 class GraspIt {
     public:
         bool move_to_pose(moveit::planning_interface::MoveGroupInterface&);
-        void gripper();
+        void gripper(bool);
+        bool default_pose(moveit::planning_interface::MoveGroupInterface&);
 };
 
-void GraspIt::gripper() {
-    // float gripper_pose = 10;
-    // gripper_control_client gripper_client("/panda_hand_controller/gripper_action", true);
-    // gripper_client.waitForServer(); //will wait for infinite time
-    // control_msgs::FollowJointTrajectoryActionGoal gripper_goal;
-    // trajectory_msgs::JointTrajectory gripper_msg;
-    // gripper_msg.points
-    // gripper_goal.goal.trajectory = 
-    // gripper_goal.command.max_effort = 11.0;
-    // gripper_goal.command.position = gripper_pose;
-    // gripper_client.sendGoal(gripper_goal);
-    // gripper_client.waitForResult(ros::Duration(5.0));
+void GraspIt::gripper(bool grasp) {
+    float gripper_pose = (grasp) ? 0.00 : 0.09;
+    gripper_control_client gripper_client("/gripper_controller/gripper_action", true);
+    gripper_client.waitForServer(); //will wait for infinite time
+    control_msgs::GripperCommandGoal gripper_goal;
+    gripper_goal.command.max_effort = 11.0;
+    gripper_goal.command.position = gripper_pose;
+    gripper_client.sendGoal(gripper_goal);
+    gripper_client.waitForResult(ros::Duration(5.0));
 }
 
 bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_group) {  // Position above the object/bucket using the transform frame
@@ -41,7 +36,7 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     ros::Duration(1.0).sleep();
 
     try {
-        transformStamped = tfBuffer.lookupTransform("panda_link0", "grasp", ros::Time(0));
+        transformStamped = tfBuffer.lookupTransform("base_link", "grasp", ros::Time(0));
     } catch (tf2::TransformException &ex) {
         // ROS_WARN("%s", ex.what());
         ros::Duration(1.0).sleep();
@@ -58,14 +53,43 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     return move_group.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
 }
 
+bool GraspIt::default_pose(moveit::planning_interface::MoveGroupInterface& move_group) {
+    std::vector<double> default_pose = {1.480, 0.129, -3.134, 1.534, -1.449, -1.756, -0.321};
+    move_group.setJointValueTarget(default_pose);
+    return move_group.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+}
+
 int main(int argc, char** argv) {
     ros::init(argc, argv, "grasp_it");
     ros::NodeHandle nh;
-    moveit::planning_interface::MoveGroupInterface move_group("panda_arm");
+    moveit::planning_interface::MoveGroupInterface move_group("arm");
     moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
+    ros::AsyncSpinner spinner(1); 
+    spinner.start();
+
+    int state;
+
     GraspIt gi;
-    gi.move_to_pose(move_group);
-    
-    return 0;
+    gi.default_pose(move_group);
+    while (ros::ok()) {
+        ros::param::get("/grasp", state);
+        if (state == 1) {
+            gi.move_to_pose(move_group);
+            ros::param::set("/grasp", 2);
+        } else if (state == 2) {
+            gi.gripper(true);
+            ros::param::set("/grasp", 3);
+        } else if (state == 3) {
+            //default pose
+            ros::param::set("/loaded", 2);
+            gi.default_pose(move_group);
+            int l;
+            ros::param::get("/loaded", l);
+            if (l == 0) {
+                ros::param::set("/grasp", 0);
+                gi.gripper(false);
+            }
+        }
+    }
 }

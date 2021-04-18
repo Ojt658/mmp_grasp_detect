@@ -15,7 +15,7 @@ namespace Screen {
     int width, height = 400;
 }
 
-class DepthDetection {
+class Image2Model {
     float x, y, depth;
     bool found, done;
 
@@ -26,15 +26,15 @@ class DepthDetection {
         ros::Subscriber momentSub_;
     
     public:
-        DepthDetection() : it_(nh_) {
+        Image2Model() : it_(nh_) {
             found, done = false;
             x, y, depth = 0.0;
 
-            image_sub_ = it_.subscribe("camera/depth/image_raw",
-                                1, &DepthDetection::imageCb, this);
+            image_sub_ = it_.subscribe("/head_camera/depth_registered/image_raw",
+                                1, &Image2Model::imageCb, this);
 
             momentSub_ = nh_.subscribe("/moment/moments", 1000,
-                                &DepthDetection::momentCb, this);
+                                &Image2Model::momentCb, this);
 
             
             // cv::namedWindow("Image window");
@@ -50,7 +50,7 @@ class DepthDetection {
 
     private:
         void offsetCalc(float *offsets) { // Calculate the offsets for the transform
-            double focal_length = 744.8116537; // look at camera info topic
+            double focal_length = 1000; // look at camera info topic
             offsets[0] = -(x - (Screen::width / 2)) * depth / focal_length;
             offsets[1] = -(y - (Screen::height / 2)) * depth / focal_length;
         }
@@ -59,7 +59,7 @@ class DepthDetection {
 
 };
 
-void DepthDetection::imageCb(const sensor_msgs::ImageConstPtr& msg) {
+void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
     if (found && !done) {
         cv_bridge::CvImagePtr cv_ptr;
         try {
@@ -76,7 +76,7 @@ void DepthDetection::imageCb(const sensor_msgs::ImageConstPtr& msg) {
     }
 }
 
-void DepthDetection::momentCb(const opencv_apps::MomentArrayStamped& msg) {
+void Image2Model::momentCb(const opencv_apps::MomentArrayStamped& msg) {
     if (msg.moments.size() > 0 && !found) { // Found an object
         // ROS_INFO_STREAM("FOUND");
         found = true;
@@ -88,7 +88,7 @@ void DepthDetection::momentCb(const opencv_apps::MomentArrayStamped& msg) {
     }
 }
 
-void DepthDetection::tfBroadcaster() {
+void Image2Model::tfBroadcaster() {
     static tf2_ros::StaticTransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
     float offsets[2];
@@ -96,7 +96,7 @@ void DepthDetection::tfBroadcaster() {
 
     // Broadcast to the transform frame the pose of the target object
     transformStamped.header.stamp = ros::Time::now();
-    transformStamped.header.frame_id = "camera_link";
+    transformStamped.header.frame_id = "head_camera_depth_frame";
     transformStamped.child_frame_id = "target_object";
     transformStamped.transform.translation.x = depth;
     transformStamped.transform.translation.y = offsets[0];
@@ -115,7 +115,7 @@ void DepthDetection::tfBroadcaster() {
 int main(int argc, char **argv) {
     ros::init(argc, argv, "depth_detection");
 
-    DepthDetection dd;
+    Image2Model dd;
     ros::Rate rate(5);
     while(ros::ok()) {
         ros::spinOnce();

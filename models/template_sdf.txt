@@ -22,6 +22,13 @@
 						<scale>{s} {s} {s}</scale>
 					</mesh>
         </geometry>
+
+      	<surface>
+        	<contact>
+          		<collide_bitmask>0x01</collide_bitmask>
+        	</contact>
+      	</surface>
+
       </collision>
       <visual name="visual">
         <geometry>
@@ -31,10 +38,10 @@
 					</mesh>
         </geometry>
         <material>
-          <ambient>0.25 0.25 0.25 1</ambient>
-          <diffuse>0.25 0.25 0.25 1</diffuse>
-          <specular>0.25 0.25 0.25 1</specular>
-          <emissive>0.25 0.25 0.25 1</emissive>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Red</name>
+            </script>
         </material> 
       </visual>
     </link>

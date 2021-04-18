@@ -9,21 +9,24 @@ import cv2
 
 class SaveImage:
     def __init__(self):
-        self.image_sub = rospy.Subscriber("/camera/depth/raw_image", Image, self.imageCb, queue_size=1)
-        self.found = True
+        self.found = False
+        self.image_sub = rospy.Subscriber("/camera/color/image_raw", Image, self.imageCb, queue_size=1)
 
     def imageCb(self, msg):
-        print("test")
+        # print("test")
         try:
-            cv_depth = CvBridge.imgmsg_to_cv2(msg, "passthrough")
+            bridge = CvBridge()
+            image = bridge.imgmsg_to_cv2(msg, "passthrough")
         except CvBridgeError as e:
             print(e)
 
-        (rows,cols,channels) = cv_depth.shape
-        if found:
-            found = False
-            cv2.imshow("Test", cv_depth)
+        # (rows,cols,channels) = cv_depth.shape
+        if not self.found:
+            found = True
+            cv2.imshow("Test", image)
             cv2.waitKey(3)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            cv2.imwrite("Test.png", image)
 
 def main():
     print("main")

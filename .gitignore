@@ -1,4 +1,6 @@
 /models/acronym/*
+/models/acronym2/*
 /models/acronym_obj/*
 src/.vscode
 scripts/.vscode
+config/*

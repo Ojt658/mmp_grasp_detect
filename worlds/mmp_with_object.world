@@ -52,7 +52,7 @@
           <material>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
+              <name>Gazebo/White</name>
             </script>
           </material>
         </visual>
@@ -71,7 +71,7 @@
     </physics>
     <scene>
       <ambient>0.4 0.4 0.4 1</ambient>
-      <background>0.7 0.7 0.7 1</background>
+      <background>0.9 0.9 0.9 1</background>
       <shadows>1</shadows>
     </scene>
     <wind/>
@@ -1077,7 +1077,7 @@
     </model>
     <model name='test_model'>
       <pose frame=''>0.71106 0.000622 0 0 -0 0</pose>
-      <static>1</static>
+      <static>0</static>
       <link name='link'>
         <inertial>
           <mass>0.0710179</mass>
@@ -1093,7 +1093,7 @@
         <collision name='collision'>
           <geometry>
             <mesh>
-              <uri>model://Bottle/meshes/74221bae887b0e801ab89e10ca4a3aec.obj</uri>
+              <uri>/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym/Bottle/meshes/74221bae887b0e801ab89e10ca4a3aec.obj</uri>
               <scale>0.000743 0.000743 0.000743</scale>
             </mesh>
           </geometry>
@@ -1114,7 +1114,7 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://Bottle/meshes/74221bae887b0e801ab89e10ca4a3aec.obj</uri>
+              <uri>/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym/Bottle/meshes/74221bae887b0e801ab89e10ca4a3aec.obj</uri>
               <scale>0.000743 0.000743 0.000743</scale>
             </mesh>
           </geometry>

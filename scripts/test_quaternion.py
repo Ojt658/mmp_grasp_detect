@@ -27,7 +27,7 @@ class GraspTransformBroadcaster(object):
 
         for index in range(len(grasp_tf_arr)):
             if grasp_succ_arr[index] == 1:
-                print(index)
+                # print(index)
                 succ.append(grasp_tf_arr[index])
 
         grasp_tf = np.array(succ[1])
