@@ -1,6 +1,7 @@
 """
 This script makes watertight versions of the .obj files so that the ACRONYM scripts
-can make use of them. It makes use of
+can make use of them. It makes use of the Manifold library suggested on the ACRONYM page.
+Author: olt13
 """
 
 import os
