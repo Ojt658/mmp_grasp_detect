@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <sdf version="1.4">
   <model name="test_model">
-    <pose>0 0 0.0 0 0 0</pose>
-    <static>true</static>
+    <static>false</static>
+    <allow_auto_disable>true</allow_auto_disable>
     <link name="link">
       <inertial>
         <mass>{m}</mass>

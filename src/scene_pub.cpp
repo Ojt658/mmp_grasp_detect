@@ -47,7 +47,7 @@ void collisionObjects(moveit::planning_interface::PlanningSceneInterface& planni
     collision_objects[0].primitives[0].dimensions.resize(3);
     collision_objects[0].primitives[0].dimensions[0] = 1;
     collision_objects[0].primitives[0].dimensions[1] = 1;
-    collision_objects[0].primitives[0].dimensions[2] = 0.39;
+    collision_objects[0].primitives[0].dimensions[2] = 0.38;
 
     /* Define the pose of the table. */
     collision_objects[0].primitive_poses.resize(1);

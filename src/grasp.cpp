@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
     spinner.start();
 
     int state;
+    bool done = false;
 
     GraspIt gi;
     gi.default_pose(move_group);
@@ -82,14 +83,10 @@ int main(int argc, char** argv) {
             ros::param::set("/grasp", 3);
         } else if (state == 3) {
             //default pose
-            ros::param::set("/loaded", 2);
             gi.default_pose(move_group);
-            int l;
-            ros::param::get("/loaded", l);
-            if (l == 0) {
-                ros::param::set("/grasp", 0);
-                gi.gripper(false);
-            }
+            gi.gripper(false);
+            ros::param::set("/loaded", 2);
+            ros::param::set("/grasp", 4);
         }
     }
 }

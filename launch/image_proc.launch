@@ -16,7 +16,7 @@
 		<arg name="g_limit_min" value="0" />
 		<arg name="b_limit_max" value="50" />
 		<arg name="b_limit_min" value="0" />
-		<arg name="debug_view" value="true"/>
+		<arg name="debug_view" value="false"/>
 	</include>
 	
 	<!--calculate image moments for contours in input image.
@@ -27,6 +27,6 @@
 	<include file="$(find opencv_apps)/launch/contour_moments.launch">
 		<arg name="node_name" value="moment" />
 		<arg name="image" value="/rgb_color_filter/image"/>
-		<arg name="debug_view" value="true"/>
+		<arg name="debug_view" value="false"/>
 	</include>
 </launch>

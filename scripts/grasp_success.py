@@ -4,47 +4,64 @@ import os
 import rospy
 import cv2
 from opencv_apps.msg import MomentArrayStamped
+from sensor_msgs.msg import JointState
 
 
 class GraspSuccess:
     def __init__(self):
         self.total_grasps = rospy.get_param("/num_models")
-        self.bridge = CvBridge()
         self.moment_sub = rospy.Subscriber('/moment/moments', MomentArrayStamped, self.momentCb, queue_size=1)
+        self.joint_sub = rospy.Subscriber('/joint_states', JointState, self.jointCb, queue_size=1)
+        self.gripper_closed = False
         self.initial = True
         self.initialX = 0.0
         self.initialY = 0.0
 
     def momentCb(self, msg):
-        if rospy.get_param('/loaded') == 1:
+        rospy.loginfo("CB")
+        if rospy.get_param('/loaded') == 0:
             self.initial = True
         else:
             self.initial = False
         
         if len(msg.moments) > 0 and self.initial:
+            rospy.loginfo("INITIALISE")
             moment = msg.moments[0]
             self.initialX = moment.center.x
             self.initialY = moment.center.y
             self.initial = False
-        else if len(msg.moments) > 0 and not self.initial and rospy.get_param('/grasp') == 3:
+        elif len(msg.moments) > 0 and not self.initial and rospy.get_param('/grasp') == 4:
+            rospy.loginfo("DIFFERENCE")
             moment = msg.moments[0]
             x = moment.center.x
             y = moment.center.y
             difference = self.checkDifference(x, y)
-            if difference[1] < 0:
+            if difference[1] > 0 and not self.gripper_closed:
                 #Moved up :: Grasp successful
-                rospy.set_param('/successful_grasps', float(rospy.get_param('/succussful_grasps')) + 1)
-            else if difference[0] > 10 or difference < -10:
+                rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 1)
+            elif difference[1] > 0 and not self.gripper_closed:
+                #Moved up :: Semi successful :: object thrown up
+                rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.75)
+            elif difference[0] > 5 or difference[0] < -5 or difference[1] < 5:
                 #moved left or right :: Semi successful
-                rospy.set_param('/successful_grasps', float(rospy.get_param('/succussful_grasps')) + 0.5)
-            else:
-                #Grasp failed
+                rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.5)
+            #Else add nothing due to failed grasp
 
             rospy.set_param('/loaded', 0)
-            self.initial = True
+            rospy.set_param('/grasp', 0)
+
+    def jointCb(self, msg):
+        positions = msg.position ## Gripper joint values at index: 13, 14
+        l_gripper = positions[13]
+        r_gripper = positions[14]
+        if l_gripper > 0.5 or r_gripper > 0.5:
+            self.gripper_closed = False
+        else:
+            self.gripper_closed = True
 
 
-    def checkDifference(x, y):
+
+    def checkDifference(self, x, y):
         return (self.initialX - x, self.initialY - y)
 
 def main():
