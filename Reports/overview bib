@@ -1,0 +1,23 @@
+{\rtf \tx504 \li504 \fi-504 \sl240 \slmult1 \sa0 [1]\tab C. Eppner, A. Mousavian, and D. Fox, \uc0\u8216{}ACRONYM: A Large-Scale Grasp Dataset Based on Simulation\uc0\u8217{}, {\i{}arXiv:2011.09584 [cs]}, Nov. 2020, Accessed: Feb. 04, 2021. [Online]. Available: http://arxiv.org/abs/2011.09584.
+\
+[2]\tab \uc0\u8216{}ACRONYM: A Large-Scale Grasp Dataset Based on Simulation\uc0\u8217{}. https://sites.google.com/nvidia.com/graspdataset (accessed Feb. 04, 2021).
+\
+[3]\tab \uc0\u8216{}GitHub\uc0\u8217{}, {\i{}GitHub}. https://github.com (accessed Feb. 04, 2021).
+\
+[4]\tab P. Schmidt, N. Vahrenkamp, M. W\uc0\u228{}chter, and T. Asfour, \uc0\u8216{}Grasping of Unknown Objects Using Deep Convolutional Neural Networks Based on Depth Images\uc0\u8217{}, in {\i{}2018 IEEE International Conference on Robotics and Automation (ICRA)}, May 2018, pp. 6831\uc0\u8211{}6838, doi: 10.1109/ICRA.2018.8463204.
+\
+[5]\tab U. Asif, J. Tang, and S. Harrer, \uc0\u8216{}GraspNet: An Efficient Convolutional Neural Network for Real-time Grasp Detection for Low-powered Devices\uc0\u8217{}, p. 8.
+\
+[6]\tab H. Cao, G. Chen, Z. Li, J. Lin, and A. Knoll, \uc0\u8216{}Lightweight Convolutional Neural Network with Gaussian-based Grasping Representation for Robotic Grasping Detection\uc0\u8217{}, {\i{}arXiv:2101.10226 [cs]}, Jan. 2021, Accessed: Feb. 04, 2021. [Online]. Available: http://arxiv.org/abs/2101.10226.
+\
+[7]\tab J. Watson, J. Hughes, and F. Iida, \uc0\u8216{}Real-World, Real-Time Robotic Grasping with Convolutional Neural Networks\uc0\u8217{}, Jul. 2017, pp. 617\uc0\u8211{}626, doi: 10.1007/978-3-319-64107-2_50.
+\
+[8]\tab S. Caldera, A. Rassau, and D. Chai, \uc0\u8216{}Review of Deep Learning Methods in Robotic Grasp Detection\uc0\u8217{}, {\i{}Multimodal Technologies and Interaction}, vol. 2, no. 3, Art. no. 3, Sep. 2018, doi: 10.3390/mti2030057.
+\
+[9]\tab S. Kumra and C. Kanan, \uc0\u8216{}Robotic Grasp Detection using Deep Convolutional Neural Networks\uc0\u8217{}, {\i{}arXiv:1611.08036 [cs]}, Jul. 2017, Accessed: Feb. 04, 2021. [Online]. Available: http://arxiv.org/abs/1611.08036.
+\
+[10]\tab \uc0\u8216{}ROS.org | Powering the world\uc0\u8217{}s robots\uc0\u8217{}. https://www.ros.org/ (accessed Feb. 06, 2021).
+\
+[11]\tab \uc0\u8216{}TensorFlow\uc0\u8217{}, {\i{}TensorFlow}. https://www.tensorflow.org/ (accessed Feb. 04, 2021).
+\
+}
