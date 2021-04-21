@@ -15,13 +15,13 @@ import cv2
 class GraspService:
     def __init__(self):
         self.model = self.build_model()
-        self.model.load_weights('/home/ollie/mmp_ws/src/mmp_grasp_detect/config/custom_model_weights6.h5')
+        # self.model.load_weights('/home/ollie/mmp_ws/src/mmp_grasp_detect/config/custom_model_weights.h5')
         self.bridge = CvBridge()
 
     @staticmethod
     def build_model():
 
-        ## First model structure
+        ## First model structure - remember to divide prediction by 100
         # inputs = keras.Input(shape=(400, 400, 1))
         # x = layers.Conv2D(32, 3)(inputs)
         # x = layers.BatchNormalization()(x)
@@ -52,11 +52,32 @@ class GraspService:
         x = layers.BatchNormalization()(x)
         x = keras.activations.relu(x)
         x = layers.Flatten()(x)
-        x = layers.Dropout(0.35)(x)
+        # x = layers.Dropout(0.35)(x)
         x = layers.Dense(128, activation='relu')(x)
         x = layers.Dense(64, activation='relu')(x)
         outputs = layers.Dense(6)(x)
         model = keras.Model(inputs=inputs, outputs=outputs)
+
+        ## New Custom Model
+        # inputs = keras.Input(shape=(400, 400, 1))
+        # x = layers.Conv2D(32, 3)(inputs)
+        # x = layers.BatchNormalization()(x)
+        # x = keras.activations.relu(x)
+        # x = layers.MaxPooling2D()(x)
+        # x = layers.Conv2D(64, 3)(x)
+        # x = layers.BatchNormalization()(x)
+        # x = keras.activations.relu(x)
+        # x = layers.MaxPooling2D()(x)
+        # x = layers.Conv2D(128, 5)(x)
+        # x = layers.BatchNormalization()(x)
+        # x = keras.activations.relu(x)
+        # x = layers.Flatten()(x)
+        # x = layers.Dropout(0.35)(x)
+        # x = layers.Dense(128, activation='relu')(x)
+        # x = layers.Dense(64, activation='relu')(x)
+        # outputs = layers.Dense(6)(x)
+        # model = keras.Model(inputs=inputs, outputs=outputs)
+
 
         return model
 
@@ -76,7 +97,8 @@ class GraspService:
         # cv2.waitKey()
         # cv2.destroyAllWindows()
 
-        prediction = self.model(img).numpy()
+        prediction = self.model(img).numpy() #/ 100
+        rospy.loginfo(prediction)
         return prediction.tolist()
 
 

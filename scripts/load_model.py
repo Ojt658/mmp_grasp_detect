@@ -30,12 +30,12 @@ class LoadModel:
             r = uniform(0, 3.14)
             p = uniform(0, 3.14)
             y = uniform(0, 3.14)
-            q = transformations.quaternion_from_euler(0, 0, y)
+            q = transformations.quaternion_from_euler(0, 0, 0)
             self.spawner(
                 model_name=name, 
                 model_xml=text, 
                 robot_namespace="", 
-                initial_pose=Pose(position=Point(0.7, 0, 0.8), orientation=Quaternion(q[0], q[1], q[2], q[3])),
+                initial_pose=Pose(position=Point(0.7, 0, 0.39), orientation=Quaternion(q[0], q[1], q[2], q[3])),
                 reference_frame="base_link"
             )
             self.tfBroadcaster(0.7, 0, 0.39)
@@ -50,9 +50,9 @@ class LoadModel:
 
 
     def randomise_grasp_objects(self, num):
-        timeout = 20
+        timeout = 15
         for m in range(num):
-            r_num = randint(0, len(self.models)) # Get random model to spawn
+            r_num = randint(0, len(self.models)-1) # Get random model to spawn
             self.spawn(self.models[r_num])
 
             rospy.set_param("/loaded", 1) # Attempt to grasp
@@ -65,8 +65,7 @@ class LoadModel:
                 # Arm going to default location
                 rospy.loginfo("Waiting for success")
                 if time() > start_time + timeout:
-                    rospy.set_param("/grasp", 0)
-                    rospy.set_param("/loaded", 0)
+                    rospy.set_param("/grasp", 3)
 
             self.delete() # Remove object from simulation
 
@@ -83,10 +82,11 @@ class LoadModel:
         transformStamped.transform.translation.y = y
         transformStamped.transform.translation.z = z
 
-        transformStamped.transform.rotation.x = 0
-        transformStamped.transform.rotation.y = 0
-        transformStamped.transform.rotation.z = 0
-        transformStamped.transform.rotation.w = 0
+        q = transformations.quaternion_from_euler(0, 0, 0)
+        transformStamped.transform.rotation.x = q[0]
+        transformStamped.transform.rotation.y = q[1]
+        transformStamped.transform.rotation.z = q[2]
+        transformStamped.transform.rotation.w = q[3]
 
         br.sendTransform(transformStamped)
 
