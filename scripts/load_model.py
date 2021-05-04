@@ -7,6 +7,7 @@ from geometry_msgs.msg import Pose, Quaternion, Point, TransformStamped
 import tf.transformations as transformations
 from random import randint, uniform
 from time import sleep, time
+from std_msgs.msg import Bool
 
 from tf2_ros import StaticTransformBroadcaster
 
@@ -20,6 +21,7 @@ class LoadModel:
         self.model_name = ""
         self.spawner = rospy.ServiceProxy("/gazebo/spawn_sdf_model", SpawnModel)
         self.del_model = rospy.ServiceProxy("/gazebo/delete_model", DeleteModel)
+        self.depth_pub = rospy.Publisher("/get_model_pose", Bool)
 
     def spawn(self, name):
         self.model_name = name
@@ -38,7 +40,7 @@ class LoadModel:
                 initial_pose=Pose(position=Point(0.7, 0, 0.39), orientation=Quaternion(q[0], q[1], q[2], q[3])),
                 reference_frame="base_link"
             )
-            self.tfBroadcaster(0.7, 0, 0.39)
+            # self.tfBroadcaster(0.7, 0, 0.39)
         except rospy.ServiceException as e:
             rospy.loginfo("Service call failed: " + e.message)
 
@@ -55,6 +57,7 @@ class LoadModel:
             r_num = randint(0, len(self.models)-1) # Get random model to spawn
             self.spawn(self.models[r_num])
 
+            self.depth_pub.publish(True)
             rospy.set_param("/loaded", 1) # Attempt to grasp
             while rospy.get_param("/loaded") == 1 and not rospy.is_shutdown():
                 # Arm grasping the loaded object

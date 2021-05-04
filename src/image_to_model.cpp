@@ -68,9 +68,9 @@ void Image2Model::tfBroadcaster() {
     transformStamped.header.stamp = ros::Time::now();
     transformStamped.header.frame_id = "target_object";
     transformStamped.child_frame_id = "grasp";
-    transformStamped.transform.translation.x = -grasp[0] - 0.1;
-    transformStamped.transform.translation.y = grasp[1];
-    transformStamped.transform.translation.z = grasp[2] + 0.025;
+    transformStamped.transform.translation.x = -grasp[0] - 0.22;
+    transformStamped.transform.translation.y = grasp[1] - 0.12;
+    transformStamped.transform.translation.z = grasp[2] + 0.12;
 
     tf2::Quaternion q;
     q.setRPY(grasp[3], grasp[4], grasp[5]); // roll pitch yaw of end effector

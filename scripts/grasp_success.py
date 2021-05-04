@@ -42,7 +42,7 @@ class GraspSuccess:
             elif difference[1] > 0 and not self.gripper_closed:
                 #Moved up :: Semi successful :: object thrown up
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.75)
-            elif difference[0] > 10 or difference[0] < -10 or difference[1] < 10:
+            elif difference[0] > 50 or difference[0] < -50 or difference[1] < 50:
                 #moved left or right :: Semi successful :: Grasp in right area or dropped soon after grasp
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.25)
             #Else add nothing due to failed grasp

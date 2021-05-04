@@ -22,7 +22,7 @@ void GraspIt::gripper(bool grasp) {
     gripper_control_client gripper_client("/gripper_controller/gripper_action", true);
     gripper_client.waitForServer(); //will wait for infinite time
     control_msgs::GripperCommandGoal gripper_goal;
-    gripper_goal.command.max_effort = 2.5;
+    gripper_goal.command.max_effort = 20;
     gripper_goal.command.position = gripper_pose;
     gripper_client.sendGoal(gripper_goal);
     gripper_client.waitForResult(ros::Duration(5.0));
@@ -53,8 +53,10 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     move_group.setPoseTarget(pose);
     move_group.move();
 
-    pose.position.x += 0.1;
-    pose.position.z -= 0.02;
+    ros::Duration(1).sleep();
+
+    pose.position.x += 0.15;
+    pose.position.z -= 0.08;
 
     move_group.setPoseTarget(pose);
     move_group.move();

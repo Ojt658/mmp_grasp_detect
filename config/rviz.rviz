@@ -689,9 +689,6 @@ Visualization Manager:
               {}
             r_wheel_link:
               {}
-            target_object:
-              grasp:
-                {}
             torso_fixed_link:
               {}
             torso_lift_link:
@@ -705,6 +702,9 @@ Visualization Manager:
                     head_camera_depth_frame:
                       head_camera_depth_optical_frame:
                         {}
+                      target_object:
+                        grasp:
+                          {}
                     head_camera_rgb_frame:
                       head_camera_rgb_optical_frame:
                         {}
@@ -765,10 +765,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.06020200625061989
+      Pitch: 0.5247976779937744
       Target Frame: world
       Value: XYOrbit (rviz)
-      Yaw: 4.6212358474731445
+      Yaw: 5.711251735687256
     Saved: ~
 Window Geometry:
   Displays:
@@ -788,5 +788,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1280
-  X: 1280
-  Y: 216
+  X: 293
+  Y: 123
