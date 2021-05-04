@@ -25,6 +25,7 @@ class LoadModel:
 
     def spawn(self, name):
         self.model_name = name
+        self.add_name(name)
         try:
             with open('/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym3/{n}/model.sdf'.format(n=name), 'r') as file:
                 text = file.read()
@@ -50,9 +51,13 @@ class LoadModel:
         except rospy.ServiceException as e:
             rospy.loginfo("Service call failed: " + e.message)
 
+    def add_name(self, name):
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.txt", 'a') as f:
+            f.write(name + ', ')
 
     def randomise_grasp_objects(self, num):
         timeout = 15
+        t = False
         for m in range(num):
             r_num = randint(0, len(self.models)-1) # Get random model to spawn
             self.spawn(self.models[r_num])
@@ -69,6 +74,9 @@ class LoadModel:
                 rospy.loginfo("Waiting for success")
                 if time() > start_time + timeout:
                     rospy.set_param("/grasp", 3)
+                    if not t:
+                        self.add_name('0\n')
+                        t = True
 
             self.delete() # Remove object from simulation
 

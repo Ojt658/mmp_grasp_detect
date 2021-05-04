@@ -7,6 +7,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <fstream>
 
 class Image2Model {
     bool found;
@@ -28,6 +29,21 @@ class Image2Model {
 
         void imageCb(const sensor_msgs::ImageConstPtr&);
         void tfBroadcaster();
+
+        void add_grasp(std::vector<double> grasp) {
+            std::ofstream file;
+
+            file.open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.txt", std::ios_base::app);
+            file << "[";
+            for (int g = 0; g < grasp.size(); g++) {
+                if (g < grasp.size() - 1) {
+                    file << grasp[g] << ", ";
+                } else {
+                    file << grasp[g];
+                }
+            }
+            file << "], ";
+        }
 };
 
 void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
@@ -40,6 +56,7 @@ void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
         srv.request.image = img;
         if (client.call(srv)) {
             ROS_INFO_STREAM("Grasp:");
+            grasp.clear();
             for (int i = 0; i < 6; i++) {
                 grasp.push_back(srv.response.grasp[i]);
             }
@@ -52,6 +69,7 @@ void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
             found = true;
             ros::param::set("/grasp", 1);
             tfBroadcaster();
+            add_grasp(grasp);
         } else {
             ROS_INFO_STREAM("Error getting grasp from service");
         }

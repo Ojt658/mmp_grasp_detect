@@ -39,12 +39,15 @@ class GraspSuccess:
             if difference[1] > 0 and not self.gripper_closed:
                 #Moved up :: Grasp successful
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 1)
+                self.add_success(1)
             elif difference[1] > 0 and not self.gripper_closed:
                 #Moved up :: Semi successful :: object thrown up
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.75)
-            elif difference[0] > 50 or difference[0] < -50 or difference[1] < 50:
+                self.add_success(0.75)
+            elif difference[0] > 100 or difference[0] < -100 or difference[1] < 100:
                 #moved left or right :: Semi successful :: Grasp in right area or dropped soon after grasp
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.25)
+                self.add_success(0.25)
             #Else add nothing due to failed grasp
 
             rospy.set_param('/grasp', 3)
@@ -63,9 +66,13 @@ class GraspSuccess:
             self.gripper_closed = True
 
 
-
     def checkDifference(self, x, y):
         return (self.initialX - x, self.initialY - y)
+
+    
+    def add_success(self, success):
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.txt", 'a') as f:
+            f.write(str(success) + '\n')
 
 def main():
     rospy.init_node("grasp_success")
