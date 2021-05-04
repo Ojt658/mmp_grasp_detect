@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <rosparam param="/num_models">5</rosparam>
-    <node name="load_models" pkg="mmp_grasp_detect" type="load_model.py" output="screen" />
-    <node name="img2model" pkg="mmp_grasp_detect" type="img2model" output="screen" />
+    <node name="eval_data" pkg="mmp_grasp_detect" type="eval_dataset.py" output="screen" />
     <node name="grasp" pkg="mmp_grasp_detect" type="grasp" output="screen" />
     <node name="grasp_success" pkg="mmp_grasp_detect" type="grasp_success.py" output="screen" />
 </launch>

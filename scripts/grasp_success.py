@@ -29,6 +29,7 @@ class GraspSuccess:
             self.initialX = moment.center.x
             self.initialY = moment.center.y
             self.initial = False
+            
         elif len(msg.moments) > 0 and not self.initial and rospy.get_param('/loaded') == 2 and not rospy.get_param('/grasp') == 3:
             rospy.loginfo("DIFFERENCE")
             moment = msg.moments[0]
@@ -41,15 +42,15 @@ class GraspSuccess:
             elif difference[1] > 0 and not self.gripper_closed:
                 #Moved up :: Semi successful :: object thrown up
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.75)
-            elif difference[0] > 10 or difference[0] < -10 or difference[1] < 5:
+            elif difference[0] > 10 or difference[0] < -10 or difference[1] < 10:
                 #moved left or right :: Semi successful :: Grasp in right area or dropped soon after grasp
                 rospy.set_param('/successful_grasps', float(rospy.get_param('/successful_grasps')) + 0.25)
             #Else add nothing due to failed grasp
 
             rospy.set_param('/grasp', 3)
-        elif len(msg.moments) == 0:
-            # Pbject not spawned in view :: so skip
-            rospy.set_param('/grasp', 3)
+        # elif len(msg.moments) == 0 and self.initial:
+        #     # Object not spawned in view :: so skip
+        #     rospy.set_param('/grasp', 3)
 
 
     def jointCb(self, msg):
@@ -72,7 +73,7 @@ def main():
 
     gs = GraspSuccess()
 
-    rospy.loginfo("Grasp success: {p}%".format(p=str(rospy.get_param("/successful_grasps")/rospy.get_param("/num_models"))))
+    # rospy.loginfo("Grasp success: {p}%".format(p=str(rospy.get_param("/successful_grasps")/rospy.get_param("/num_models"))))
 
     rospy.spin()
 

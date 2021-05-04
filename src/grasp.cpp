@@ -53,11 +53,11 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     move_group.setPoseTarget(pose);
     move_group.move();
 
-    // pose.position.x += 0.06;
-    // pose.position.z -= 0.02;
+    pose.position.x += 0.1;
+    pose.position.z -= 0.02;
 
-    // move_group.setPoseTarget(pose);
-    // move_group.move();
+    move_group.setPoseTarget(pose);
+    move_group.move();
 }
 
 bool GraspIt::default_pose(moveit::planning_interface::MoveGroupInterface& move_group) {
@@ -91,6 +91,7 @@ int main(int argc, char** argv) {
         if (state == 1) {
             gi.move_to_pose(move_group);
             ros::param::set("/grasp", 2);
+            // else ros::param::set("/grasp", 3);
         } else if (state == 2) {
             gi.gripper(true);
             gi.retreat(move_group);

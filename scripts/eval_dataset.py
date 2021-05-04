@@ -23,6 +23,7 @@ class EvalData:
         self.obj_loc = '/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym3'
         self.models = {m for m in os.listdir(self.obj_loc)}
         self.data = pd.read_csv('/home/ollie/Documents/Major project/scw1780/dataset.csv')
+        # print(self.data['image'].value_counts())
 
     def get_obj_grasp_list(self):
         names = []
@@ -48,11 +49,14 @@ class EvalData:
 
         # print(names[:5])
         both = {}
+
         for index, n in enumerate(names):
             if n in self.models and n not in both:
                 both[n] = grasps.iloc[index,:].values
             elif n in self.models:
-                both[n] = np.vstack((both[n], grasps.iloc[index,:].values))
+                if len(both[n]) < 10:
+                    both[n] = np.vstack((both[n], grasps.iloc[index,:].values))
+
         keys = both.keys()
         return keys, both
 
@@ -106,7 +110,24 @@ class EvalData:
 
 
     def grasp(self, grasp):
-        sleep(1)
+        br = StaticTransformBroadcaster()
+        transformStamped = TransformStamped()
+
+        transformStamped.header.stamp = rospy.Time.now()
+        transformStamped.header.frame_id = "target_object"
+        transformStamped.child_frame_id = "grasp"
+
+        transformStamped.transform.translation.x = grasp[0]
+        transformStamped.transform.translation.y = grasp[1]
+        transformStamped.transform.translation.z = grasp[2]
+
+        q = transformations.quaternion_from_euler(grasp[3], grasp[4], grasp[5])
+        transformStamped.transform.rotation.x = q[0]
+        transformStamped.transform.rotation.y = q[1]
+        transformStamped.transform.rotation.z = q[2]
+        transformStamped.transform.rotation.w = q[3]
+
+        br.sendTransform(transformStamped)
 
 
 if __name__ == '__main__':
@@ -116,7 +137,11 @@ if __name__ == '__main__':
     for index, model in enumerate(models[0]):
         for grasp in models[1][model]:
             ed.spawn(model)
-            ed.grasp(models[1][model])
+            rospy.set_param('/loaded', 1)
+            rospy.set_param('/grasp', 1)
+            ed.grasp(grasp)
+            while rospy.get_param('/loaded') != 0:
+                continue
             ed.delete(model)
 
     rospy.spin()

@@ -50,8 +50,8 @@ void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
             ROS_INFO_STREAM("PITCH: " << grasp[4]);
             ROS_INFO_STREAM("YAW: " << grasp[5]);
             found = true;
-            tfBroadcaster();
             ros::param::set("/grasp", 1);
+            tfBroadcaster();
         } else {
             ROS_INFO_STREAM("Error getting grasp from service");
         }
@@ -70,7 +70,7 @@ void Image2Model::tfBroadcaster() {
     transformStamped.child_frame_id = "grasp";
     transformStamped.transform.translation.x = -grasp[0] - 0.1;
     transformStamped.transform.translation.y = grasp[1];
-    transformStamped.transform.translation.z = grasp[2] + 0.01;
+    transformStamped.transform.translation.z = grasp[2] + 0.025;
 
     tf2::Quaternion q;
     q.setRPY(grasp[3], grasp[4], grasp[5]); // roll pitch yaw of end effector
