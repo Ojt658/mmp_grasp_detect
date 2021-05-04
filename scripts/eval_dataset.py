@@ -29,6 +29,7 @@ class EvalData:
         names = []
         grasps = self.data[['x', 'y', 'z', 'roll', 'pitch', 'yaw']]
 
+        #Get object name from the dataset
         for obj in self.data['image'].values:
             obj = obj.split('.')[0].split('_')[0]
             try:
