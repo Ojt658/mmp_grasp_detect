@@ -56,7 +56,7 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     ros::Duration(1).sleep();
 
     pose.position.x += 0.15;
-    pose.position.z -= 0.08;
+    // pose.position.z -= 0.06;
 
     move_group.setPoseTarget(pose);
     move_group.move();

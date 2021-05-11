@@ -20,7 +20,7 @@ namespace Screen {
 
 class ImageDepth {
     float x, y, depth;
-    bool run;
+    bool run, moment;
 
     protected:
         ros::NodeHandle nh_;
@@ -32,6 +32,7 @@ class ImageDepth {
     public:
         ImageDepth() : it_(nh_) {
             run = false;
+            moment = false;
             x, y, depth = 0.0;
 
             image_sub_ = it_.subscribe("/head_camera/depth_registered/image_raw",
@@ -40,7 +41,7 @@ class ImageDepth {
             momentSub_ = nh_.subscribe("/moment/moments", 1000,
                                 &ImageDepth::momentCb, this);
 
-            commandSub_ = nh_.subscribe("/get_model_pose", 1000,
+            commandSub_ = nh_.subscribe("/model_loaded", 1,
                                         &ImageDepth::commandCb, this);
 
             
@@ -68,7 +69,8 @@ class ImageDepth {
 };
 
 void ImageDepth::imageCb(const sensor_msgs::ImageConstPtr& msg) {
-    if (run) {
+    // ROS_INFO("IMAGE");
+    if (moment) {
         cv_bridge::CvImagePtr cv_ptr;
         try {
             cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_32FC1);
@@ -78,23 +80,28 @@ void ImageDepth::imageCb(const sensor_msgs::ImageConstPtr& msg) {
         }
 
         depth = cv_ptr -> image.at<float>(y,x); // get the depth from the pixel
-        ROS_INFO_STREAM(depth);
+        ROS_INFO_STREAM("Depth: " << depth);
         tfBroadcaster();
-
+        moment = false;
         run = false;
     }
 }
 
 void ImageDepth::momentCb(const opencv_apps::MomentArrayStamped& msg) {
+    // ROS_INFO("MOMENT");
     if (msg.moments.size() > 0 && run) { // Found an object
         x = msg.moments[0].center.x;
         y = msg.moments[0].center.y;
         ROS_INFO_STREAM("X: " << x << "   Y: " << y);
+        moment = true;
     }
 }
 
 void ImageDepth::commandCb(const std_msgs::Bool& msg) {
-    if (msg.data) {
+    // ROS_INFO("COMMAND");
+    int loaded;
+    ros::param::get("/loaded", loaded);
+    if (msg.data && loaded == 0) {
         run = true;
     }
 }

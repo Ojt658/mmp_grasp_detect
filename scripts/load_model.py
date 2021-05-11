@@ -21,7 +21,7 @@ class LoadModel:
         self.model_name = ""
         self.spawner = rospy.ServiceProxy("/gazebo/spawn_sdf_model", SpawnModel)
         self.del_model = rospy.ServiceProxy("/gazebo/delete_model", DeleteModel)
-        self.depth_pub = rospy.Publisher("/get_model_pose", Bool)
+        self.model_loaded_pub = rospy.Publisher("/model_loaded", Bool, queue_size=1)
 
     def spawn(self, name):
         self.model_name = name
@@ -41,7 +41,7 @@ class LoadModel:
                 initial_pose=Pose(position=Point(0.7, 0, 0.39), orientation=Quaternion(q[0], q[1], q[2], q[3])),
                 reference_frame="base_link"
             )
-            # self.tfBroadcaster(0.7, 0, 0.39)
+            # self.tfBroadcaster(0.7, 0, 0.39) ## Replaced with depth detection node
         except rospy.ServiceException as e:
             rospy.loginfo("Service call failed: " + e.message)
 
@@ -52,36 +52,47 @@ class LoadModel:
             rospy.loginfo("Service call failed: " + e.message)
 
     def add_name(self, name):
-        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.txt", 'a') as f:
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results1.csv", 'a') as f:
             f.write(name + ', ')
 
     def randomise_grasp_objects(self, num):
+        loaded = Bool()
         timeout = 15
-        t = False
+        
         for m in range(num):
+            t = False
             r_num = randint(0, len(self.models)-1) # Get random model to spawn
             self.spawn(self.models[r_num])
+            loaded.data = True
 
-            self.depth_pub.publish(True)
-            rospy.set_param("/loaded", 1) # Attempt to grasp
+            # rospy.set_param('/initial', 0)
+            rospy.set_param("/loaded", 0) # Initialise each node.
+            while rospy.get_param("/loaded") == 0 or rospy.get_param("/initial") == 0 and not rospy.is_shutdown():
+                self.model_loaded_pub.publish(loaded)
+
+            rospy.set_param("/grasp", 1) # Start grasping process
+            # Attempt to grasp
             while rospy.get_param("/loaded") == 1 and not rospy.is_shutdown():
                 # Arm grasping the loaded object
-                rospy.loginfo("Grasping random object")
+                # rospy.loginfo("Grasping random object")
+                pass
 
+            loaded.data = False
+            self.model_loaded_pub.publish(loaded)
             start_time = time()
             while rospy.get_param("/loaded") == 2 and not rospy.is_shutdown():
                 # Arm going to default location
-                rospy.loginfo("Waiting for success")
+                # rospy.loginfo("Waiting for success")
                 if time() > start_time + timeout:
                     rospy.set_param("/grasp", 3)
                     if not t:
-                        self.add_name('0\n')
+                        self.add_name('0' + '\n')
                         t = True
 
             self.delete() # Remove object from simulation
 
     @staticmethod
-    def tfBroadcaster(x, y, z):
+    def tfBroadcaster(x, y, z):  ## Replaced with depth detection node
         br = StaticTransformBroadcaster()
         transformStamped = TransformStamped()
 
@@ -109,6 +120,7 @@ def main():
 
     load.randomise_grasp_objects(rospy.get_param("/num_models"))
     rospy.loginfo("Done")
+    rospy.loginfo("Grasp Average: {a}".format(a=str(rospy.get_param("/successful_grasps")/rospy.get_param("/num_models")*100)))
 
 
 if __name__ == "__main__":
