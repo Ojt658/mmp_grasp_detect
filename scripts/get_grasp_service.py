@@ -41,23 +41,6 @@ class GraspService:
         # outputs = layers.Dense(6)(x)
         # model = keras.Model(inputs=inputs, outputs=outputs)
 
-
-        ## Custom model structure
-        # inputs = keras.Input(shape=(400, 400, 1))
-        # x = layers.Conv2D(32, 3)(inputs)
-        # x = layers.BatchNormalization()(x)
-        # x = keras.activations.relu(x)
-        # x = layers.MaxPooling2D()(x)
-        # x = layers.Conv2D(64, 3)(x)
-        # x = layers.BatchNormalization()(x)
-        # x = keras.activations.relu(x)
-        # x = layers.Flatten()(x)
-        # # x = layers.Dropout(0.35)(x)
-        # x = layers.Dense(128, activation='relu')(x)
-        # x = layers.Dense(64, activation='relu')(x)
-        # outputs = layers.Dense(6)(x)
-        # model = keras.Model(inputs=inputs, outputs=outputs)
-
         ## New Custom Model
         inputs = keras.Input(shape=(400, 400, 1))
         x = layers.Conv2D(32, 3)(inputs)

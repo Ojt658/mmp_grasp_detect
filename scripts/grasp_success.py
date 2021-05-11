@@ -74,7 +74,7 @@ class GraspSuccess:
 
     
     def add_success(self, success):
-        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results1.csv", 'a') as f:
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results2.csv", 'a') as f:
             f.write(str(success) + '\n')
 
 def main():

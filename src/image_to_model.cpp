@@ -39,7 +39,7 @@ class Image2Model {
         void add_grasp(std::vector<double> grasp) {
             std::ofstream file;
 
-            file.open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results1.csv", std::ios_base::app);
+            file.open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results2.csv", std::ios_base::app);
             file << "[";
             for (int g = 0; g < grasp.size(); g++) {
                 if (g < grasp.size() - 1) {
@@ -106,7 +106,7 @@ void Image2Model::tfBroadcaster() {
     transformStamped.child_frame_id = "grasp";
     transformStamped.transform.translation.x = -grasp[0] - 0.2;
     transformStamped.transform.translation.y = grasp[1] - 0.05;
-    transformStamped.transform.translation.z = grasp[2] + 0.01;
+    transformStamped.transform.translation.z = grasp[2] + 0.03;
 
     tf2::Quaternion q;
     q.setRPY(grasp[3], grasp[4], grasp[5]); // roll pitch yaw of end effector
