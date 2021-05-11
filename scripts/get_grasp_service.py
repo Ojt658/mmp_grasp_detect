@@ -61,7 +61,6 @@ class GraspService:
         outputs = layers.Dense(6)(x)
         model = keras.Model(inputs=inputs, outputs=outputs)
 
-
         return model
 
 
