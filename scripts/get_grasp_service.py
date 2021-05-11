@@ -41,7 +41,7 @@ class GraspService:
         # outputs = layers.Dense(6)(x)
         # model = keras.Model(inputs=inputs, outputs=outputs)
 
-        ## New Custom Model
+        ## Custom Model
         inputs = keras.Input(shape=(400, 400, 1))
         x = layers.Conv2D(32, 3)(inputs)
         x = layers.BatchNormalization()(x)
