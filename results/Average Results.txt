@@ -1,0 +1,5 @@
+Average Success:
+GT: 51%
+Model: 35%
+
+This folder contains the visualisation of both sets of results, plus the .csv files that contain the neat result tables, averaged for each category of object.
