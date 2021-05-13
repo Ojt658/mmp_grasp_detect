@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+Spike work for saving images from the Gazebo scene.
+"""
+
 import rospy
 import matplotlib.pyplot as plt
 from sensor_msgs.msg import Image

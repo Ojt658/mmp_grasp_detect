@@ -2,7 +2,7 @@
 <launch>
     <!-- Tell Gazebo where to find our custom object models -->
     <env name="GAZEBO_MODEL_PATH"
-         value="$(find mmp_grasp_detect)/models/acronym3:$(optenv GAZEBO_MODEL_PATH)"/> 
+         value="$(find mmp_grasp_detect)/models/acronym:$(optenv GAZEBO_MODEL_PATH)"/> 
 
     <!-- GAZEBO arguments -->
     <arg name="paused" default="false" />

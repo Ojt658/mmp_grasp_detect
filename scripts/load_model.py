@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 
+"""
+This ROS node is used to assess the CNN in the simultion environment.
+It works alongside the depth detection, grasping, image to model,and grasp success nodes.
+"""
+
 import os
 import rospy
 from gazebo_msgs.srv import SpawnModel, DeleteModel
@@ -23,11 +28,12 @@ class LoadModel:
         self.del_model = rospy.ServiceProxy("/gazebo/delete_model", DeleteModel)
         self.model_loaded_pub = rospy.Publisher("/model_loaded", Bool, queue_size=1)
 
+
     def spawn(self, name):
         self.model_name = name
         self.add_name(name + ', ')
         try:
-            with open('/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym3/{n}/model.sdf'.format(n=name), 'r') as file:
+            with open('/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym/{n}/model.sdf'.format(n=name), 'r') as file:
                 text = file.read()
 
             r = uniform(0, 3.14)
@@ -45,15 +51,18 @@ class LoadModel:
         except rospy.ServiceException as e:
             rospy.loginfo("Service call failed: " + e.message)
 
+
     def delete(self):
         try:
             self.del_model(self.model_name)
         except rospy.ServiceException as e:
             rospy.loginfo("Service call failed: " + e.message)
 
+
     def add_name(self, name):
-        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results2.csv", 'a') as f:
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.csv", 'a') as f:
             f.write(name)
+
 
     def randomise_grasp_objects(self, num):
         loaded = Bool()
@@ -64,13 +73,16 @@ class LoadModel:
             r_num = randint(0, len(self.models)-1) # Get random model to spawn
             self.spawn(self.models[r_num])
             loaded.data = True
-
-            # rospy.set_param('/initial', 0)
+            start_time = time()
+            rospy.set_param('/initial', 0)
             rospy.set_param("/loaded", 0) # Initialise each node.
             while rospy.get_param("/loaded") == 0 or rospy.get_param("/initial") == 0 and not rospy.is_shutdown():
                 self.model_loaded_pub.publish(loaded)
+                if time() > start_time + timeout:
+                    break
 
             rospy.set_param("/grasp", 1) # Start grasping process
+
             # Attempt to grasp
             while rospy.get_param("/loaded") == 1 and not rospy.is_shutdown():
                 # Arm grasping the loaded object
@@ -90,6 +102,7 @@ class LoadModel:
                         t = True
 
             self.delete() # Remove object from simulation
+
 
     @staticmethod
     def tfBroadcaster(x, y, z):  ## Replaced with depth detection node
@@ -115,7 +128,7 @@ class LoadModel:
 
 def main():
     rospy.init_node("spawner")
-    models = [m for m in os.listdir("/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym3/")]
+    models = [m for m in os.listdir("/home/ollie/mmp_ws/src/mmp_grasp_detect/models/acronym/")]
     load = LoadModel(models)
 
     load.randomise_grasp_objects(rospy.get_param("/num_models"))

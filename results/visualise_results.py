@@ -1,3 +1,9 @@
+"""
+This script utilises matplotlib and wordcloud to produce visualisations of the results to aid in analysis.
+When using PyCharm the plots are generated within the IDE and can be saved from there. They are shown in the results folder.
+Author: olt13
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
@@ -29,9 +35,7 @@ def bot_15(data):
 
 
 def top_15(data):
-    # print(data)
     top = sorted(data, key=lambda x: data[x], reverse=True)[:15]
-    # print(top)
     vals = []
     for n in top:
         vals.append(data[n])

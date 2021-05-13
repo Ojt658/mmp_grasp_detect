@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+This ROS node determines the success of the current grasp.
+"""
+
 import os
 import rospy
 import cv2
@@ -74,7 +78,7 @@ class GraspSuccess:
 
     
     def add_success(self, success):
-        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results2.csv", 'a') as f:
+        with open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.csv", 'a') as f:
             f.write(str(success) + '\n')
 
 def main():

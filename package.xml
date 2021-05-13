@@ -68,6 +68,7 @@
   <depend>geometry_msgs</depend>
   <depend>image_transport</depend>
   <depend>opencv_apps</depend>
+  <exec_depend>python-tensorflow-pip</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

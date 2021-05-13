@@ -1,3 +1,7 @@
+/*
+This ROS node is called in the intitial setup in mmp.launch. It initialises the moveit planning scene and sets the default pose for the robot joints.
+*/
+
 #include <ros/ros.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit/move_group_interface/move_group_interface.h>

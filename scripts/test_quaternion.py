@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+This node tests some spike work in relation to the 4x4 transformations to r,p,y grasp poses.
+"""
+
 import h5py
 import os
 import numpy as np

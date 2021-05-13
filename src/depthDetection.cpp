@@ -1,3 +1,7 @@
+/*
+This ROS node is used to position the target object in the scene by using the depth camera. It publishes the location as a static transform.
+*/
+
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/image_encodings.h>
@@ -44,13 +48,7 @@ class ImageDepth {
             commandSub_ = nh_.subscribe("/model_loaded", 1,
                                         &ImageDepth::commandCb, this);
 
-            
-            // cv::namedWindow("Image window");
         }
-
-        // ~DepthDetection() {
-        //     cv::destroyWindow("Image window");
-        // }
 
         void imageCb(const sensor_msgs::ImageConstPtr&);
         void momentCb(const opencv_apps::MomentArrayStamped&);
@@ -84,6 +82,7 @@ void ImageDepth::imageCb(const sensor_msgs::ImageConstPtr& msg) {
         tfBroadcaster();
         moment = false;
         run = false;
+        ros::param::set("/loaded", 1);
     }
 }
 

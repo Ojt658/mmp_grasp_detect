@@ -1,3 +1,7 @@
+/*
+This ROS node utilises the GetGraspService to retrieve a grasp for the current object.
+*/
+
 #include <ros/ros.h>
 #include "mmp_grasp_detect/GetGrasp.h"
 #include <image_transport/image_transport.h>
@@ -36,10 +40,10 @@ class Image2Model {
         void loadedCb(const std_msgs::Bool&);
         void tfBroadcaster();
 
-        void add_grasp(std::vector<double> grasp) {
+        void add_grasp(std::vector<double> grasp) { // Save the Grasp to the results file
             std::ofstream file;
 
-            file.open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/custom_results2.csv", std::ios_base::app);
+            file.open("/home/ollie/mmp_ws/src/mmp_grasp_detect/results/results.csv", std::ios_base::app);
             file << "[";
             for (int g = 0; g < grasp.size(); g++) {
                 if (g < grasp.size() - 1) {
@@ -65,12 +69,11 @@ void Image2Model::loadedCb(const std_msgs::Bool& model_loaded) {
 }
 
 void Image2Model::imageCb(const sensor_msgs::ImageConstPtr& msg) {
-    // ROS_INFO_STREAM("Found: " << found << " loaded: " << loaded);
-    if (loaded && !found) {
+    if (loaded && !found) { // This logic makes sure the service is only called once per object
         mmp_grasp_detect::GetGrasp srv;
         sensor_msgs::Image img = *msg;
         srv.request.image = img;
-        if (client.call(srv)) {
+        if (client.call(srv)) {  // Call the grasp service to get the grasp prediction
             // ROS_INFO_STREAM("Grasp:");
             grasp.clear();
             for (int i = 0; i < 6; i++) {
@@ -98,14 +101,12 @@ void Image2Model::tfBroadcaster() {
     static tf2_ros::StaticTransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
 
-    // ros::Duration(0.1).sleep();
-
-    // Broadcast to the transform frame the pose of the target object
+    // Broadcast to the transform frame the pose of the grasp
     transformStamped.header.stamp = ros::Time::now();
     transformStamped.header.frame_id = "target_object";
     transformStamped.child_frame_id = "grasp";
     transformStamped.transform.translation.x = -grasp[0] - 0.2;
-    transformStamped.transform.translation.y = grasp[1] - 0.05;
+    transformStamped.transform.translation.y = grasp[1];
     transformStamped.transform.translation.z = grasp[2] + 0.03;
 
     tf2::Quaternion q;

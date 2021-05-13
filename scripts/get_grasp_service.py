@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+"""
+This is a ROS service that uses the trained tensorflow weights (the custom model) to predict grasps for the requested image.
+"""
+
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -20,27 +24,6 @@ class GraspService:
 
     @staticmethod
     def build_model():
-
-        ## First model structure - remember to divide prediction by 100
-        # inputs = keras.Input(shape=(400, 400, 1))
-        # x = layers.Conv2D(32, 3)(inputs)
-        # x = layers.BatchNormalization()(x)
-        # x = keras.activations.relu(x)
-        # x = layers.MaxPooling2D()(x)
-        # x = layers.Conv2D(64, 3)(x)
-        # x = layers.BatchNormalization()(x)
-        # x = keras.activations.relu(x)
-        # x = layers.MaxPooling2D()(x)
-        # x = layers.Conv2D(128, 5)(x)
-        # x = layers.BatchNormalization()(x)
-        # x = keras.activations.relu(x)
-        # x = layers.Flatten()(x)
-        # # x = layers.Dropout(0.35)(x)
-        # x = layers.Dense(512, activation='relu')(x)
-        # x = layers.Dense(256, activation='relu')(x)
-        # outputs = layers.Dense(6)(x)
-        # model = keras.Model(inputs=inputs, outputs=outputs)
-
         ## Custom Model
         inputs = keras.Input(shape=(400, 400, 1))
         x = layers.Conv2D(32, 3)(inputs)

@@ -1,3 +1,7 @@
+/*
+This ROS node performs the grasping on the target objects.
+*/
+
 #include <ros/ros.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
@@ -18,7 +22,7 @@ class GraspIt {
 };
 
 void GraspIt::gripper(bool grasp) {
-    float gripper_pose = (grasp) ? 0.00 : 0.09;
+    float gripper_pose = (grasp) ? 0.00 : 0.09; // Open or close gripper
     gripper_control_client gripper_client("/gripper_controller/gripper_action", true);
     gripper_client.waitForServer(); //will wait for infinite time
     control_msgs::GripperCommandGoal gripper_goal;
@@ -47,7 +51,7 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
     // ROS_INFO("Translation: [%f, %f, %f]", transformStamped.transform.translation.x, transformStamped.transform.translation.y, transformStamped.transform.translation.z);
     pose.position.x = transformStamped.transform.translation.x;
     pose.position.y = transformStamped.transform.translation.y;
-    pose.position.z = transformStamped.transform.translation.z; // the z offset makes the robot position the arm above the object to later move down on
+    pose.position.z = transformStamped.transform.translation.z;
     pose.orientation = transformStamped.transform.rotation;
 
     move_group.setPoseTarget(pose);
@@ -55,7 +59,7 @@ bool GraspIt::move_to_pose(moveit::planning_interface::MoveGroupInterface& move_
 
     ros::Duration(1).sleep();
 
-    pose.position.x += 0.18;
+    pose.position.x += 0.15;
     pose.position.z -= 0.03;
 
     move_group.setPoseTarget(pose);
@@ -90,19 +94,18 @@ int main(int argc, char** argv) {
     gi.default_pose(move_group);
     while (ros::ok()) {
         ros::param::get("/grasp", state);
-        if (state == 1) {
+        if (state == 1) {  // Attempt to grasp object
             gi.move_to_pose(move_group);
             ros::param::set("/grasp", 2);
-            // else ros::param::set("/grasp", 3);
-        } else if (state == 2) {
+        } else if (state == 2) {  // Retreat to find success
             gi.gripper(true);
             gi.retreat(move_group);
             ros::param::set("/loaded", 2);
-        } else if (state == 3) {
+        } else if (state == 3) {  // Go to default pose
             //default pose
             gi.default_pose(move_group);
             gi.gripper(false);
-            ros::param::set("/grasp", 0);
+            ros::param::set("/grasp", 0);  // Reset params
             ros::param::set("/loaded", 0);
         }
     }
